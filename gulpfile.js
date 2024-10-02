@@ -10,9 +10,36 @@ gulp.task('build', () => {
 });
 
 gulp.task('test', () => {
-    // Add your test commands here
+  // Unit tests
+  gulp.src('tests/unit/*.js')
+    .pipe(mocha({reporter: 'spec'}));
+
+  // Integration tests
+  gulp.src('tests/integration/*.js')
+    .pipe(mocha({reporter: 'spec'}));
+
+  // End-to-end tests (e.g., using Cypress)
+  gulp.src('tests/e2e/*.js')
+    .pipe(cypress.run());
 });
 
 gulp.task('deploy', () => {
-    // Add your deployment commands here
+  // Deploy to GitHub Pages
+  gulp.src('./dist/**/*')
+    .pipe(ghPages());
+
+  // Deploy to AWS S3
+  gulp.src('./dist/**/*')
+    .pipe(awspublish({
+      region: 'your-region',
+      bucket: 'your-bucket',
+    }));
+
+  // Deploy to FTP server
+  gulp.src('./dist/**/*')
+    .pipe(ftp({
+      host: 'your-host',
+      user: 'your-username',
+      pass: 'your-password',
+    }));
 });
